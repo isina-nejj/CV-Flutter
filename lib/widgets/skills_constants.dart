@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './skills_widget.dart';
+
 // Define skill percentages as variables for easier modification
 const double dartSkillPercentage = 0.98;
 const double flutterSkillPercentage = 0.92;
