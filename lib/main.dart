@@ -130,8 +130,45 @@ class ResponsiveText extends StatelessWidget {
 }
 
 // Update ResumePage to use the SkillsWidget
-class ResumePage extends StatelessWidget {
+class ResumePage extends StatefulWidget {
   const ResumePage({Key? key}) : super(key: key);
+
+  @override
+  State<ResumePage> createState() => _ResumePageState();
+}
+
+class _ResumePageState extends State<ResumePage>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _opacityAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 2500),
+      vsync: this,
+    );
+
+    _scaleAnimation = Tween<double>(
+      begin: 0.3,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
+
+    _opacityAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
+
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +191,18 @@ class ResumePage extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SectionTitle(title: 'About Me'),
-                              const ContactBox(),
+                              AnimatedBuilder(
+                                animation: _controller,
+                                builder: (context, child) {
+                                  return Transform.scale(
+                                    scale: _scaleAnimation.value,
+                                    child: Opacity(
+                                      opacity: _opacityAnimation.value,
+                                      child: const ContactBox(),
+                                    ),
+                                  );
+                                },
+                              ),
                               SectionTitle(title: 'Skills'),
                               SkillsWidget(skills: skills),
                             ],
