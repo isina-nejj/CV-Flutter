@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../../../core/style/colors.dart';
 import '../../../core/style/text_styles.dart';
 import '../../../core/style/sizes.dart';
+import '../../../core/theme/dark_mode_controller.dart';
+import '../../../shared/widgets/dark_mode_toggle.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -15,9 +17,24 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscureText = true;
+  late final DarkModeController darkMode;
+
+  @override
+  void initState() {
+    super.initState();
+    darkMode = DarkModeController.shared;
+    darkMode.addListener(_onThemeChanged);
+  }
+
+  void _onThemeChanged() {
+    if (mounted) {
+      setState(() {});
+    }
+  }
 
   @override
   void dispose() {
+    darkMode.removeListener(_onThemeChanged);
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -33,26 +50,31 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = darkMode.isDarkMode;
     return Scaffold(
       appBar: AppBar(
         title: Text(
           'ورود مدیر گروه',
-          style: AppTextStyles.getPageTitle(
-              Theme.of(context).brightness == Brightness.dark),
+          style: AppTextStyles.getPageTitle(darkMode.isDarkMode),
         ),
-        backgroundColor: Theme.of(context).brightness == Brightness.dark
+        backgroundColor: darkMode.isDarkMode
             ? AppColors.darkAppBarBackground
             : AppColors.appBarBackground,
+        actions: [
+          DarkModeToggle(controller: darkMode),
+        ],
       ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              AppColors.loginGradientStart,
-              AppColors.loginGradientEnd,
-            ],
+            colors: isDark
+                ? [
+                    AppColors.darkLoginGradientStart,
+                    AppColors.darkLoginGradientEnd
+                  ]
+                : [AppColors.loginGradientStart, AppColors.loginGradientEnd],
           ),
         ),
         child: Center(
@@ -61,6 +83,7 @@ class _LoginPageState extends State<LoginPage> {
               padding: AppSizes.pagePadding,
               child: Card(
                 elevation: AppSizes.cardElevation,
+                color: isDark ? AppColors.darkCardBackground : Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: AppSizes.defaultRadius,
                 ),
@@ -73,18 +96,31 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         Text(
                           'خوش آمدید',
-                          style: AppTextStyles.loginTitle,
+                          style: AppTextStyles.getLoginTitle(isDark),
                         ),
                         const SizedBox(height: 32),
                         TextFormField(
                           controller: _emailController,
                           keyboardType: TextInputType.emailAddress,
                           textDirection: TextDirection.ltr,
+                          style: TextStyle(
+                              color: isDark ? Colors.white : Colors.black87),
                           decoration: InputDecoration(
                             labelText: 'ایمیل',
-                            prefixIcon: const Icon(Icons.email),
+                            prefixIcon: Icon(Icons.email,
+                                color: isDark ? Colors.white70 : null),
+                            labelStyle: TextStyle(
+                                color: isDark ? Colors.white70 : null),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                color: isDark
+                                    ? Colors.white30
+                                    : Colors.grey.shade300,
+                              ),
                             ),
                           ),
                           validator: (value) {
@@ -103,14 +139,20 @@ class _LoginPageState extends State<LoginPage> {
                           controller: _passwordController,
                           obscureText: _obscureText,
                           textDirection: TextDirection.ltr,
+                          style: TextStyle(
+                              color: isDark ? Colors.white : Colors.black87),
                           decoration: InputDecoration(
                             labelText: 'رمز عبور',
-                            prefixIcon: const Icon(Icons.lock),
+                            prefixIcon: Icon(Icons.lock,
+                                color: isDark ? Colors.white70 : null),
+                            labelStyle: TextStyle(
+                                color: isDark ? Colors.white70 : null),
                             suffixIcon: IconButton(
                               icon: Icon(
                                 _obscureText
                                     ? Icons.visibility_off
                                     : Icons.visibility,
+                                color: isDark ? Colors.white70 : null,
                               ),
                               onPressed: () {
                                 setState(() {
@@ -120,6 +162,14 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                color: isDark
+                                    ? Colors.white30
+                                    : Colors.grey.shade300,
+                              ),
                             ),
                           ),
                           validator: (value) {
@@ -139,14 +189,16 @@ class _LoginPageState extends State<LoginPage> {
                           child: ElevatedButton(
                             onPressed: _handleLogin,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.loginButtonBackground,
+                              backgroundColor: isDark
+                                  ? AppColors.darkLoginButtonBackground
+                                  : AppColors.loginButtonBackground,
                               shape: RoundedRectangleBorder(
                                 borderRadius: AppSizes.defaultRadius,
                               ),
                             ),
                             child: Text(
                               'ورود',
-                              style: AppTextStyles.loginButtonText,
+                              style: AppTextStyles.getLoginButtonText(isDark),
                             ),
                           ),
                         ),

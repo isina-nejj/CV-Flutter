@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'khabgah_blocks.dart';
+import 'blocks_page.dart';
 
 class KhabgahPage extends StatelessWidget {
   const KhabgahPage({super.key});

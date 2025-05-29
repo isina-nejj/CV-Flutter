@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../../core/style/colors.dart';
-import '../../../core/style/text_styles.dart';
-import '../../../core/style/sizes.dart';
-import '../../../core/theme/dark_mode_controller.dart';
-import 'khabgah_floor_map.dart';
+import '../../../../core/style/colors.dart';
+import '../../../../core/style/text_styles.dart';
+import '../../../../core/theme/dark_mode_controller.dart';
+import '../../../../shared/widgets/dark_mode_toggle.dart';
+import '../../../../shared/utils/constants.dart';
+import 'floor_map_page.dart';
 
 class KhabgahFloorsPage extends StatelessWidget {
   final String blockName;
@@ -12,6 +13,7 @@ class KhabgahFloorsPage extends StatelessWidget {
     super.key,
     required this.blockName,
   });
+
   @override
   Widget build(BuildContext context) {
     final floors = ['طبقه همکف', 'طبقه اول', 'طبقه دوم'];
@@ -34,17 +36,17 @@ class KhabgahFloorsPage extends StatelessWidget {
       body: Container(
         color: darkMode.isDarkMode ? AppColors.darkBackground : AppColors.white,
         child: ListView.builder(
-          padding: AppSizes.pagePadding,
+          padding: EdgeInsets.all(AppConstants.defaultPadding),
           itemCount: floors.length,
           itemBuilder: (context, index) {
             return Card(
-              margin: const EdgeInsets.only(bottom: 16),
+              margin: EdgeInsets.only(bottom: AppConstants.defaultMargin),
               color: darkMode.isDarkMode
                   ? AppColors.darkFloorCardBackground
                   : AppColors.floorCardBackground,
               elevation: darkMode.isDarkMode ? 0 : 2,
               shape: RoundedRectangleBorder(
-                borderRadius: AppSizes.defaultRadius,
+                borderRadius: BorderRadius.circular(AppConstants.defaultRadius),
                 side: BorderSide(
                   color: darkMode.isDarkMode
                       ? AppColors.darkFloorCardBorder
@@ -55,7 +57,8 @@ class KhabgahFloorsPage extends StatelessWidget {
               child: Material(
                 color: Colors.transparent,
                 child: InkWell(
-                  borderRadius: AppSizes.defaultRadius,
+                  borderRadius:
+                      BorderRadius.circular(AppConstants.defaultRadius),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -75,7 +78,7 @@ class KhabgahFloorsPage extends StatelessWidget {
                         : null;
                   }),
                   child: Padding(
-                    padding: AppSizes.cardPadding,
+                    padding: EdgeInsets.all(AppConstants.defaultPadding),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -86,13 +89,13 @@ class KhabgahFloorsPage extends StatelessWidget {
                               ? AppColors.darkFloorCardBorder
                               : AppColors.floorCardBorder,
                         ),
-                        const SizedBox(height: 12),
+                        SizedBox(height: AppConstants.defaultMargin * 0.75),
                         Text(
                           floors[index],
                           style: AppTextStyles.floorTitle(darkMode.isDarkMode),
                           textAlign: TextAlign.center,
                         ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: AppConstants.defaultMargin * 0.5),
                         Text(
                           'برای مشاهده اتاق‌ها کلیک کنید',
                           style: TextStyle(

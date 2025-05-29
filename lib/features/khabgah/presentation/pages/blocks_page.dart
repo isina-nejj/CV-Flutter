@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../../core/style/colors.dart';
-import '../../../core/style/text_styles.dart';
-import '../../../core/style/sizes.dart';
-import '../../../core/theme/dark_mode_controller.dart';
-import 'khabgah_floors.dart';
+import '../../../../core/style/colors.dart';
+import '../../../../core/style/text_styles.dart';
+import '../../../../core/style/sizes.dart';
+import '../../../../core/theme/dark_mode_controller.dart';
+import 'floors_page.dart';
+import 'package:unipath/shared/widgets/dark_mode_toggle.dart';
 
 class KhabgahBlocksPage extends StatelessWidget {
   const KhabgahBlocksPage({super.key});
@@ -50,7 +51,7 @@ class KhabgahBlocksPage extends StatelessWidget {
                 );
               },
               child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
+                duration: Duration(milliseconds: 300),
                 decoration: BoxDecoration(
                   color: darkMode.isDarkMode
                       ? AppColors.darkBlockBackground
@@ -76,15 +77,15 @@ class KhabgahBlocksPage extends StatelessWidget {
                             colors: darkMode.isDarkMode
                                 ? [
                                     AppColors.darkDormitoryStartColor
-                                        .withOpacity(0.1),
+                                        .withAlpha((0.1 * 255).toInt()),
                                     AppColors.darkDormitoryEndColor
-                                        .withOpacity(0.05),
+                                        .withAlpha((0.05 * 255).toInt()),
                                   ]
                                 : [
                                     AppColors.dormitoryStartColor
-                                        .withOpacity(0.1),
+                                        .withAlpha((0.1 * 255).toInt()),
                                     AppColors.dormitoryEndColor
-                                        .withOpacity(0.05),
+                                        .withAlpha((0.05 * 255).toInt()),
                                   ],
                           ),
                         ),
@@ -101,7 +102,7 @@ class KhabgahBlocksPage extends StatelessWidget {
                                 ? AppColors.darkBlockBorder
                                 : AppColors.blockBorder,
                           ),
-                          const SizedBox(height: 16),
+                          SizedBox(height: AppSizes.gridSpacing),
                           Text(
                             blocks[index],
                             style:

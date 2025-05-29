@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
-import '../../../../data/services/hive_service.dart';
+import '../../../../../data/services/hive_service.dart';
 import 'edit_course_page.dart';
 import '../../../../../core/style/sizes.dart';
 import '../../../../../core/style/text_styles.dart';
 import '../../../../../core/style/colors.dart';
-import '../../../../core/theme/dark_mode_controller.dart';
+import '../../../../../core/theme/dark_mode_controller.dart';
 
 class SectionPopup extends StatelessWidget {
   final int courseId;
@@ -187,7 +187,8 @@ class SectionPopup extends StatelessWidget {
                     return Center(
                       child: Text(
                         'خطا در بارگذاری سکشن‌ها',
-                        style: AppTextStyles.errorText.copyWith(
+                        style: AppTextStyles.errorText(darkMode.isDarkMode)
+                            .copyWith(
                           color: darkMode.isDarkMode
                               ? AppColors.darkText
                               : Colors.red,

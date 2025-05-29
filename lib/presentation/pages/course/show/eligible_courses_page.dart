@@ -4,6 +4,7 @@ import '../../../../../core/style/colors.dart';
 import '../../../../../core/style/text_styles.dart';
 import '../../../../../core/theme/dark_mode_controller.dart';
 import 'course_timetable.dart';
+import '../../../../../shared/widgets/dark_mode_toggle.dart';
 
 class EligibleCoursesPage extends StatefulWidget {
   final List<int> selectedCourseIds;
@@ -22,8 +23,8 @@ class EligibleCoursesPage extends StatefulWidget {
 class _EligibleCoursesPageState extends State<EligibleCoursesPage> {
   List<Map<String, dynamic>>? _cachedCourses;
   Future<List<Map<String, dynamic>>>? _coursesFuture;
-  Map<int, bool> _coursesWithCorequisites = {};
-  Map<int, bool> _selectedEligibleCourses = {};
+  final Map<int, bool> _coursesWithCorequisites = {};
+  final Map<int, bool> _selectedEligibleCourses = {};
   late final DarkModeController darkMode;
   String filterOption =
       'all'; // Options: 'all', 'withSections', 'withoutSections'
@@ -181,9 +182,9 @@ class _EligibleCoursesPageState extends State<EligibleCoursesPage> {
 
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final darkMode = DarkModeController.shared;
 
-    final termColors = isDarkMode
+    final termColors = darkMode.isDarkMode
         ? [
             AppColors.darkRedSelected,
             AppColors.darkBlueSelected,
@@ -205,12 +206,12 @@ class _EligibleCoursesPageState extends State<EligibleCoursesPage> {
             AppColors.pinkShade100,
           ];
 
-    final courseColor = (bool isSelected, int termIndex) => isSelected
-        ? (isDarkMode ? AppColors.darkAccent : AppColors.blue)
+    Color courseColor(bool isSelected, int termIndex) => isSelected
+        ? (darkMode.isDarkMode ? AppColors.darkAccent : AppColors.blue)
         : termColors[termIndex % termColors.length];
 
-    final termHeaderColor =
-        (int termIndex) => termColors[termIndex % termColors.length];
+    Color termHeaderColor(int termIndex) =>
+        termColors[termIndex % termColors.length];
 
     return Scaffold(
       appBar: AppBar(
@@ -223,8 +224,12 @@ class _EligibleCoursesPageState extends State<EligibleCoursesPage> {
             icon: Icon(
               Icons.filter_list,
               color: filterOption != 'all'
-                  ? (isDarkMode ? AppColors.darkAccent : AppColors.white)
-                  : (isDarkMode ? AppColors.darkText : AppColors.white),
+                  ? (darkMode.isDarkMode
+                      ? AppColors.darkAccent
+                      : AppColors.white)
+                  : (darkMode.isDarkMode
+                      ? AppColors.darkText
+                      : AppColors.white),
             ),
             tooltip: 'فیلتر دروس',
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
@@ -235,7 +240,9 @@ class _EligibleCoursesPageState extends State<EligibleCoursesPage> {
                     Icon(
                       Icons.clear_all,
                       color: filterOption == 'all'
-                          ? (isDarkMode ? AppColors.darkAccent : AppColors.blue)
+                          ? (darkMode.isDarkMode
+                              ? AppColors.darkAccent
+                              : AppColors.blue)
                           : null,
                     ),
                     const SizedBox(width: 8),
@@ -243,7 +250,7 @@ class _EligibleCoursesPageState extends State<EligibleCoursesPage> {
                       'همه دروس',
                       style: TextStyle(
                         color: filterOption == 'all'
-                            ? (isDarkMode
+                            ? (darkMode.isDarkMode
                                 ? AppColors.darkAccent
                                 : AppColors.blue)
                             : null,
@@ -262,7 +269,9 @@ class _EligibleCoursesPageState extends State<EligibleCoursesPage> {
                     Icon(
                       Icons.check_circle_outline,
                       color: filterOption == 'withSections'
-                          ? (isDarkMode ? AppColors.darkAccent : AppColors.blue)
+                          ? (darkMode.isDarkMode
+                              ? AppColors.darkAccent
+                              : AppColors.blue)
                           : null,
                     ),
                     const SizedBox(width: 8),
@@ -270,7 +279,7 @@ class _EligibleCoursesPageState extends State<EligibleCoursesPage> {
                       'دروس دارای سکشن',
                       style: TextStyle(
                         color: filterOption == 'withSections'
-                            ? (isDarkMode
+                            ? (darkMode.isDarkMode
                                 ? AppColors.darkAccent
                                 : AppColors.blue)
                             : null,
@@ -289,7 +298,9 @@ class _EligibleCoursesPageState extends State<EligibleCoursesPage> {
                     Icon(
                       Icons.remove_circle_outline,
                       color: filterOption == 'withoutSections'
-                          ? (isDarkMode ? AppColors.darkAccent : AppColors.blue)
+                          ? (darkMode.isDarkMode
+                              ? AppColors.darkAccent
+                              : AppColors.blue)
                           : null,
                     ),
                     const SizedBox(width: 8),
@@ -297,7 +308,7 @@ class _EligibleCoursesPageState extends State<EligibleCoursesPage> {
                       'دروس بدون سکشن',
                       style: TextStyle(
                         color: filterOption == 'withoutSections'
-                            ? (isDarkMode
+                            ? (darkMode.isDarkMode
                                 ? AppColors.darkAccent
                                 : AppColors.blue)
                             : null,
@@ -325,9 +336,9 @@ class _EligibleCoursesPageState extends State<EligibleCoursesPage> {
                 snapshot.hasError ||
                 !snapshot.hasData ||
                 snapshot.data!.isEmpty) {
-              return const Text(
+              return Text(
                 'دروس مجاز',
-                style: AppTextStyles.eligibleCourseTitle,
+                style: AppTextStyles.eligibleCourseTitle(darkMode.isDarkMode),
               );
             }
 
@@ -340,11 +351,12 @@ class _EligibleCoursesPageState extends State<EligibleCoursesPage> {
               children: [
                 Text(
                   '${courses.length} درس',
-                  style: AppTextStyles.eligibleCourseTitle,
+                  style: AppTextStyles.eligibleCourseTitle(darkMode.isDarkMode),
                 ),
                 Text(
                   '$totalUnits واحد',
-                  style: AppTextStyles.eligibleCourseSubtitle,
+                  style:
+                      AppTextStyles.eligibleCourseSubtitle(darkMode.isDarkMode),
                 ),
               ],
             );
@@ -378,18 +390,21 @@ class _EligibleCoursesPageState extends State<EligibleCoursesPage> {
                 );
               },
               backgroundColor:
-                  isDarkMode ? AppColors.darkAccent : AppColors.blue,
+                  darkMode.isDarkMode ? AppColors.darkAccent : AppColors.blue,
               label: Text(
                 'ادامه (${_selectedEligibleCourses.values.where((v) => v).length} درس)',
                 style: TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
-                  color: isDarkMode ? AppColors.darkText : AppColors.white,
+                  color: darkMode.isDarkMode
+                      ? AppColors.darkText
+                      : AppColors.white,
                 ),
               ),
               icon: Icon(
                 Icons.arrow_forward,
-                color: isDarkMode ? AppColors.darkText : AppColors.white,
+                color:
+                    darkMode.isDarkMode ? AppColors.darkText : AppColors.white,
               ),
             ),
           );
@@ -397,7 +412,9 @@ class _EligibleCoursesPageState extends State<EligibleCoursesPage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: Container(
-        color: isDarkMode ? AppColors.darkBackground : AppColors.blueShade50,
+        color: darkMode.isDarkMode
+            ? AppColors.darkBackground
+            : AppColors.blueShade50,
         child: FutureBuilder<List<Map<String, dynamic>>>(
           future: _coursesFuture,
           builder: (context, snapshot) {
@@ -473,7 +490,7 @@ class _EligibleCoursesPageState extends State<EligibleCoursesPage> {
                                   style: TextStyle(
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.w600,
-                                    color: isDarkMode
+                                    color: darkMode.isDarkMode
                                         ? AppColors.darkText
                                         : AppColors.black,
                                   ),
@@ -501,7 +518,7 @@ class _EligibleCoursesPageState extends State<EligibleCoursesPage> {
                                         horizontal: 8.0),
                                     decoration: BoxDecoration(
                                       color: isEligibleSelected
-                                          ? (isDarkMode
+                                          ? (darkMode.isDarkMode
                                               ? AppColors.darkAccent
                                               : AppColors.blue)
                                           : courseColor(isSelected, termIndex),
@@ -509,11 +526,12 @@ class _EligibleCoursesPageState extends State<EligibleCoursesPage> {
                                       boxShadow: [
                                         BoxShadow(
                                           color: isEligibleSelected
-                                              ? (isDarkMode
+                                              ? (darkMode.isDarkMode
                                                   ? AppColors.darkAccent
-                                                      .withOpacity(0.3)
-                                                  : AppColors.blue
-                                                      .withOpacity(0.3))
+                                                      .withAlpha(
+                                                          (0.3 * 255).toInt())
+                                                  : AppColors.blue.withAlpha(
+                                                      (0.3 * 255).toInt()))
                                               : AppColors.blackWithOpacity10,
                                           offset: const Offset(0, 4),
                                           blurRadius: 6.0,
@@ -537,10 +555,10 @@ class _EligibleCoursesPageState extends State<EligibleCoursesPage> {
                                                   fontSize: 16.0,
                                                   fontWeight: FontWeight.bold,
                                                   color: isEligibleSelected
-                                                      ? (isDarkMode
+                                                      ? (darkMode.isDarkMode
                                                           ? AppColors.darkText
                                                           : AppColors.white)
-                                                      : (isDarkMode
+                                                      : (darkMode.isDarkMode
                                                           ? AppColors.darkText
                                                           : AppColors.black),
                                                 ),
@@ -550,10 +568,10 @@ class _EligibleCoursesPageState extends State<EligibleCoursesPage> {
                                                 '${course['units'] ?? 0} واحد',
                                                 style: TextStyle(
                                                   color: isEligibleSelected
-                                                      ? (isDarkMode
+                                                      ? (darkMode.isDarkMode
                                                           ? AppColors.darkText
                                                           : AppColors.white)
-                                                      : (isDarkMode
+                                                      : (darkMode.isDarkMode
                                                           ? AppColors.darkText
                                                           : AppColors.black),
                                                 ),
@@ -567,7 +585,7 @@ class _EligibleCoursesPageState extends State<EligibleCoursesPage> {
                                             left: 8,
                                             child: Icon(
                                               Icons.check_circle,
-                                              color: isDarkMode
+                                              color: darkMode.isDarkMode
                                                   ? AppColors.darkText
                                                   : AppColors.white,
                                               size: 20,

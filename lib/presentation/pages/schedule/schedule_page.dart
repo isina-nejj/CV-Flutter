@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../../core/style/text_styles.dart';
-import '../../../core/theme/dark_mode_controller.dart';
 import '../../../core/style/colors.dart';
 import '../../../data/services/hive_service.dart';
+import '../../../shared/widgets/custom_button.dart';
+import '../../../shared/widgets/dark_mode_toggle.dart';
+import '../../../core/theme/dark_mode_controller.dart' as theme;
 
 class SchedulePage extends StatelessWidget {
   final HiveService hiveService;
@@ -14,41 +16,65 @@ class SchedulePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final darkMode = DarkModeController();
+    final darkMode = theme.DarkModeController.shared;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Builder(
-          builder: (context) => Text(
+    return AnimatedBuilder(
+      animation: darkMode,
+      builder: (context, _) => Scaffold(
+        appBar: AppBar(
+          title: Text(
             'برنامه کلاسی',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).brightness == Brightness.dark
-                  ? Colors.white
-                  : Colors.black,
-            ),
+            style: AppTextStyles.getPageTitle(darkMode.isDarkMode),
           ),
+          centerTitle: true,
+          backgroundColor: darkMode.isDarkMode
+              ? AppColors.darkAppBarBackground
+              : AppColors.appBarBackground,
+          actions: [
+            DarkModeToggle(controller: darkMode),
+          ],
+          elevation: 0,
         ),
-        centerTitle: true,
-        backgroundColor: darkMode.isDarkMode
-            ? AppColors.darkAppBarBackground
-            : AppColors.appBarBackground,
-        actions: [
-          DarkModeToggle(controller: darkMode),
-        ],
-      ),
-      body: Container(
-        color: darkMode.isDarkMode
-            ? AppColors.darkScheduleBackground
-            : AppColors.white,
-        child: Center(
-          child: Text(
-            'صفحه برنامه کلاسی',
-            style: AppTextStyles.schedulePageTitle.copyWith(
-              color:
-                  darkMode.isDarkMode ? AppColors.darkText : AppColors.black87,
-            ),
+        body: Container(
+          width: double.infinity,
+          color: darkMode.isDarkMode
+              ? AppColors.darkScheduleBackground
+              : AppColors.white,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.calendar_today,
+                size: 64,
+                color: darkMode.isDarkMode
+                    ? AppColors.darkIconInactive
+                    : Colors.grey[400],
+              ),
+              const SizedBox(height: 24),
+              Text(
+                'برنامه هفتگی',
+                style: AppTextStyles.schedulePageTitle(darkMode.isDarkMode),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'برای مشاهده برنامه کلاسی خود\nابتدا دروس خود را انتخاب کنید',
+                style: AppTextStyles.cardCaption(darkMode.isDarkMode),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 32),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                child: CustomButton(
+                  text: 'انتخاب دروس',
+                  darkMode: darkMode,
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: Icons.add_circle_outline,
+                ),
+              ),
+            ],
           ),
         ),
       ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-
 import 'core/theme/dark_mode_controller.dart';
 import 'core/theme/app_theme.dart';
 import 'core/localization/app_localizations.dart';
@@ -8,7 +7,7 @@ import 'data/models/course_model.dart';
 import 'data/models/section_model.dart';
 import 'data/services/hive_service.dart';
 import 'presentation/pages/home/home_page.dart';
-
+  
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -34,7 +33,7 @@ void main() async {
   runApp(MyApp(
     darkModeController: darkModeController,
     hiveService: hiveService,
-  ));
+  ));  
 }
 
 class MyApp extends StatelessWidget {

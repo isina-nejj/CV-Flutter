@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../../core/style/colors.dart';
-import '../../../core/style/text_styles.dart';
-import '../../../core/theme/dark_mode_controller.dart';
+import '../../../../core/style/colors.dart';
+import '../../../../core/style/text_styles.dart';
+import '../../../../core/theme/dark_mode_controller.dart';
+import '../../../../shared/widgets/dark_mode_toggle.dart';
+import '../../../../shared/utils/constants.dart';
 
 class KhabgahRoomDetailsPage extends StatelessWidget {
   final String blockName;
@@ -37,7 +39,7 @@ class KhabgahRoomDetailsPage extends StatelessWidget {
         color: darkMode.isDarkMode ? AppColors.darkBackground : AppColors.white,
         width: double.infinity,
         height: double.infinity,
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(AppConstants.defaultPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -45,42 +47,47 @@ class KhabgahRoomDetailsPage extends StatelessWidget {
               'مشخصات اتاق:',
               style: AppTextStyles.floorTitle(darkMode.isDarkMode),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: AppConstants.defaultMargin),
             Card(
               color: darkMode.isDarkMode ? Colors.grey[800] : Colors.white,
               elevation: 4,
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(AppConstants.defaultPadding),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildDetailRow('بلوک:', blockName),
-                    const SizedBox(height: 8),
+                    SizedBox(height: AppConstants.defaultMargin / 2),
                     _buildDetailRow('طبقه:', floorName),
-                    const SizedBox(height: 8),
+                    SizedBox(height: AppConstants.defaultMargin / 2),
                     _buildDetailRow('شماره اتاق:', roomNumber.toString()),
-                    const SizedBox(height: 8),
-                    _buildDetailRow('ظرفیت:', '4 نفر'),
-                    const SizedBox(height: 8),
+                    SizedBox(height: AppConstants.defaultMargin / 2),
+                    _buildDetailRow('نوع اتاق:',
+                        AppConstants.roomTypes['quad'] ?? 'چهار نفره'),
+                    SizedBox(height: AppConstants.defaultMargin / 2),
+                    _buildDetailRow(
+                        'ظرفیت:', '${AppConstants.maxRoomCapacity} نفر'),
+                    SizedBox(height: AppConstants.defaultMargin / 2),
                     _buildDetailRow('وضعیت:', 'خالی'),
                   ],
                 ),
               ),
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: AppConstants.defaultMargin * 1.5),
             Text(
               'ساکنین:',
               style: AppTextStyles.floorTitle(darkMode.isDarkMode),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: AppConstants.defaultMargin),
             Expanded(
               child: ListView.builder(
-                itemCount: 0, // Will be populated with actual residents
+                itemCount: 0,
                 itemBuilder: (context, index) {
                   return Card(
                     color:
                         darkMode.isDarkMode ? Colors.grey[800] : Colors.white,
-                    margin: const EdgeInsets.only(bottom: 8),
+                    margin:
+                        EdgeInsets.only(bottom: AppConstants.defaultMargin / 2),
                     child: ListTile(
                       title: Text('نام دانشجو $index'),
                       subtitle: Text('شماره دانشجویی'),

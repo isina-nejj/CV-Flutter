@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import '../../widgets/animated_menu_button.dart';
 import '../../../core/style/sizes.dart';
 import '../../../core/style/text_styles.dart';
-import '../../../core/theme/dark_mode_controller.dart';
+import '../../../../core/theme/dark_mode_controller.dart';
 import '../course/course_page.dart';
 import '../schedule/schedule_page.dart';
 // import '../grades/grades_page.dart';
-import '../khabgah/khabgah.dart';
-import '../next_term/course_registration_page.dart';
+import '../../../features/khabgah/presentation/pages/khabgah.dart';
+// import '../next_term/course_registration_page.dart';
 import '../../../data/services/api_service.dart';
 import '../../../data/services/hive_service.dart';
+import '../../../shared/widgets/dark_mode_toggle.dart';
 import '../login/login_page.dart';
 
 class MainPage extends StatefulWidget {
@@ -34,16 +35,16 @@ class _MainPageState extends State<MainPage> {
   }
 
   Future<void> _debugPrintCourses() async {
-    debugPrint('\n=== وضعیت داده‌های ذخیره شده در کش ===');
+    print('\n=== وضعیت داده‌های ذخیره شده در کش ===');
     try {
       final data = await widget.hiveService.getAllData();
       final courseMap = (data['course_map'] as Map?)?.length ?? 0;
       final sections = (data['sections'] as List?)?.length ?? 0;
-      debugPrint('تعداد کل دروس در course_map: $courseMap');
-      debugPrint('تعداد سکشن‌ها: $sections');
-      debugPrint('=== پایان وضعیت داده‌ها ===\n');
+      print('تعداد کل دروس در course_map: $courseMap');
+      print('تعداد سکشن‌ها: $sections');
+      print('=== پایان وضعیت داده‌ها ===\n');
     } catch (e) {
-      debugPrint('خطا در نمایش اطلاعات کش: $e');
+      print('خطا در نمایش اطلاعات کش: $e');
     }
   }
 
@@ -106,7 +107,7 @@ class _MainPageState extends State<MainPage> {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).brightness == Brightness.dark
+                color: DarkModeController.shared.isDarkMode
                     ? Colors.white
                     : Colors.black,
               ),
@@ -147,7 +148,8 @@ class _MainPageState extends State<MainPage> {
               children: [
                 AnimatedMenuButton(
                   title: 'انتخاب واحد',
-                  style: AppTextStyles.mainPageMenuButton,
+                  style: AppTextStyles.mainPageMenuButton(
+                      DarkModeController.shared.isDarkMode),
                   icon: Icons.school,
                   onTap: () {
                     Navigator.push(
@@ -167,7 +169,8 @@ class _MainPageState extends State<MainPage> {
                 ),
                 AnimatedMenuButton(
                   title: 'برنامه کلاسی',
-                  style: AppTextStyles.mainPageMenuButton,
+                  style: AppTextStyles.mainPageMenuButton(
+                      DarkModeController.shared.isDarkMode),
                   icon: Icons.calendar_today,
                   onTap: () {
                     Navigator.push(
@@ -205,7 +208,8 @@ class _MainPageState extends State<MainPage> {
                 // ),
                 AnimatedMenuButton(
                   title: 'رزرو خوابگاه',
-                  style: AppTextStyles.mainPageMenuButton,
+                  style: AppTextStyles.mainPageMenuButton(
+                      DarkModeController.shared.isDarkMode),
                   icon: Icons.apartment,
                   onTap: () {
                     Navigator.push(
@@ -222,7 +226,8 @@ class _MainPageState extends State<MainPage> {
                 ),
                 AnimatedMenuButton(
                   title: 'ثبت دروس ترم بعد',
-                  style: AppTextStyles.mainPageMenuButton,
+                  style: AppTextStyles.mainPageMenuButton(
+                      DarkModeController.shared.isDarkMode),
                   icon: Icons.book,
                   onTap: () {
                     Navigator.push(

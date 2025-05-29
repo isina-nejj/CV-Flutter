@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../../core/style/colors.dart';
-import '../../../core/style/text_styles.dart';
-import '../../../core/theme/dark_mode_controller.dart';
-import 'khabgah_room_details.dart';
+import '../../../../core/style/colors.dart';
+import '../../../../core/style/text_styles.dart';
+import '../../../../core/theme/dark_mode_controller.dart';
+import '../../../../shared/utils/constants.dart';
+import 'package:unipath/features/khabgah/presentation/pages/room_details_page.dart';
+import '../../../../shared/widgets/dark_mode_toggle.dart';
 
 class KhabgahFloorMapPage extends StatelessWidget {
   final String blockName;
@@ -17,37 +19,40 @@ class KhabgahFloorMapPage extends StatelessWidget {
   // Colors for light and dark modes
   static Map<String, Color> getLightColors() {
     return <String, Color>{
-      'room': const Color(0xFFFFD700), // Golden yellow
-      'corridor': const Color(0xFF64B5F6), // Light blue
-      'central': const Color(0xFFEF5350), // Light red
-      'facilities': const Color(0xFF78909C), // Blue grey
-      'stairs': const Color(0xFF66BB6A), // Light green
-      'prayer': const Color(0xFF9575CD), // Light purple
+      'room': const Color(0xFFFFD700),
+      'corridor': const Color(0xFF64B5F6),
+      'central': const Color(0xFFEF5350),
+      'facilities': const Color(0xFF78909C),
+      'stairs': const Color(0xFF66BB6A),
+      'prayer': const Color(0xFF9575CD),
     };
   }
 
   static Map<String, Color> getDarkColors() {
     return <String, Color>{
-      'room': const Color(0xFFB8860B), // Darker golden
-      'corridor': const Color(0xFF1976D2), // Darker blue
-      'central': const Color(0xFFC62828), // Darker red
-      'facilities': const Color(0xFF455A64), // Darker blue grey
-      'stairs': const Color(0xFF2E7D32), // Darker green
-      'prayer': const Color(0xFF5E35B1), // Darker purple
+      'room': const Color(0xFFB8860B),
+      'corridor': const Color(0xFF1976D2),
+      'central': const Color(0xFFC62828),
+      'facilities': const Color(0xFF455A64),
+      'stairs': const Color(0xFF2E7D32),
+      'prayer': const Color(0xFF5E35B1),
     };
   }
 
   void _navigateToRoomDetails(BuildContext context, int roomNumber) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => KhabgahRoomDetailsPage(
-          blockName: blockName,
-          floorName: floorName,
-          roomNumber: roomNumber,
+    if (roomNumber >= AppConstants.minRoomNumber &&
+        roomNumber <= AppConstants.maxRoomNumber) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => KhabgahRoomDetailsPage(
+            blockName: blockName,
+            floorName: floorName,
+            roomNumber: roomNumber,
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 
   Widget _build3DContainer({
@@ -60,7 +65,8 @@ class KhabgahFloorMapPage extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: color,
-        borderRadius: borderRadius ?? BorderRadius.circular(8),
+        borderRadius:
+            borderRadius ?? BorderRadius.circular(AppConstants.defaultRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.3),
@@ -140,13 +146,11 @@ class KhabgahFloorMapPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final darkMode = DarkModeController();
+    final isDarkMode = darkMode.isDarkMode;
     final screenSize = MediaQuery.of(context).size;
     final mapWidth = screenSize.width * 0.9;
     final mapHeight = screenSize.height * 0.7;
-    final isDarkMode = darkMode.isDarkMode;
-    final colors = isDarkMode
-        ? KhabgahFloorMapPage.getDarkColors()
-        : KhabgahFloorMapPage.getLightColors();
+    final colors = isDarkMode ? getDarkColors() : getLightColors();
 
     final floorIndex = _getFloorIndex();
     final roomOffset = (floorIndex - 1) * 18;
@@ -172,7 +176,7 @@ class KhabgahFloorMapPage extends StatelessWidget {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(AppConstants.defaultPadding),
               child: Text(
                 'نقشه طبقه',
                 style: AppTextStyles.floorTitle(isDarkMode),
@@ -188,10 +192,11 @@ class KhabgahFloorMapPage extends StatelessWidget {
                   child: Container(
                     width: mapWidth,
                     height: mapHeight,
-                    margin: const EdgeInsets.all(20),
+                    margin: EdgeInsets.all(AppConstants.defaultMargin),
                     decoration: BoxDecoration(
                       color: isDarkMode ? Colors.grey[900] : Colors.grey[100],
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius:
+                          BorderRadius.circular(AppConstants.defaultRadius * 2),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withOpacity(0.3),
@@ -223,7 +228,7 @@ class KhabgahFloorMapPage extends StatelessWidget {
                           ),
                         ),
 
-                        // Main corridor (Blue)
+                        // Main corridor
                         Positioned(
                           top: mapHeight * 0.1,
                           bottom: 0,
@@ -237,7 +242,7 @@ class KhabgahFloorMapPage extends StatelessWidget {
                           ),
                         ),
 
-                        // Central empty space (Red)
+                        // Central space
                         Positioned(
                           top: mapHeight * 0.2,
                           bottom: mapHeight * 0.2,
@@ -267,10 +272,7 @@ class KhabgahFloorMapPage extends StatelessWidget {
 
                         // Right side rooms
                         ...List.generate(9, (index) {
-                          final roomNumber = roomOffset +
-                              9 +
-                              index +
-                              1; // Ensures continuity with left rooms
+                          final roomNumber = roomOffset + 9 + index + 1;
                           return Positioned(
                             top: mapHeight * (0.1 + index * 0.09),
                             right: 0,
@@ -282,7 +284,7 @@ class KhabgahFloorMapPage extends StatelessWidget {
                           );
                         }),
 
-                        // Left kitchen (آشپزخانه)
+                        // Left kitchen
                         Positioned(
                           bottom: 0,
                           left: 0,
@@ -291,10 +293,11 @@ class KhabgahFloorMapPage extends StatelessWidget {
                           child: _build3DContainer(
                             context: context,
                             color: colors['facilities']!,
-                            child: const Center(
+                            child: Center(
                               child: Text(
-                                'آشپزخانه',
-                                style: TextStyle(
+                                AppConstants.facilityTypes['kitchen'] ??
+                                    'آشپزخانه',
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -303,7 +306,7 @@ class KhabgahFloorMapPage extends StatelessWidget {
                           ),
                         ),
 
-                        // Right kitchen (آشپزخانه)
+                        // Right kitchen
                         Positioned(
                           bottom: 0,
                           right: 0,
@@ -312,10 +315,11 @@ class KhabgahFloorMapPage extends StatelessWidget {
                           child: _build3DContainer(
                             context: context,
                             color: colors['facilities']!,
-                            child: const Center(
+                            child: Center(
                               child: Text(
-                                'آشپزخانه',
-                                style: TextStyle(
+                                AppConstants.facilityTypes['kitchen'] ??
+                                    'آشپزخانه',
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -324,7 +328,7 @@ class KhabgahFloorMapPage extends StatelessWidget {
                           ),
                         ),
 
-                        // Left stairway (راهپله)
+                        // Left stairway
                         Positioned(
                           bottom: 0,
                           left: mapWidth * 0.25,
@@ -345,7 +349,7 @@ class KhabgahFloorMapPage extends StatelessWidget {
                           ),
                         ),
 
-                        // Right stairway (راهپله)
+                        // Right stairway
                         Positioned(
                           bottom: 0,
                           right: mapWidth * 0.25,
@@ -366,7 +370,7 @@ class KhabgahFloorMapPage extends StatelessWidget {
                           ),
                         ),
 
-                        // Bathroom (حمام)
+                        // Bathroom
                         Positioned(
                           bottom: 0,
                           left: mapWidth * 0.375,
@@ -375,10 +379,11 @@ class KhabgahFloorMapPage extends StatelessWidget {
                           child: _build3DContainer(
                             context: context,
                             color: colors['facilities']!,
-                            child: const Center(
+                            child: Center(
                               child: Text(
-                                'حمام',
-                                style: TextStyle(
+                                AppConstants.facilityTypes['bathroom'] ??
+                                    'سرویس بهداشتی',
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),

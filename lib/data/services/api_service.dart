@@ -17,8 +17,10 @@ class ApiException implements Exception {
 
 class ApiService {
   static const String baseUrl = 'https://isinanej.pythonanywhere.com';
-  static const Duration timeoutDuration = Duration(seconds: 30);
-  static const int maxRetries = 3;
+  // Reduced timeout to fail faster during development
+  static const Duration timeoutDuration = Duration(seconds: 10);
+  // Reduced retries to fail faster during development
+  static const int maxRetries = 2;
 
   static Future<Map<String, dynamic>> getAllUniversityData() async {
     int retryCount = 0;

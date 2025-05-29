@@ -12,7 +12,7 @@ class AppColors {
   static const Color blue = Colors.blue;
   static const Color indigo = Colors.indigo;
   static const Color indigoAccent = Colors.indigoAccent;
-  static const Color appBarBackground = indigo;
+  // static const Color appBarBackground = indigo;
   static const Color appBarText = white;
   static const Color cardBackground = white;
 
@@ -44,7 +44,7 @@ class AppColors {
   // Dark Mode Colors
   static const Color darkBackground = Color(0xFF121212);
   static const Color darkSurface = Color(0xFF1E1E1E);
-  static const Color darkPrimary = Color(0xFF3F51B5);
+  // static const Color darkPrimary = Color(0xFF3F51B5);
   static const Color darkAccent = Color(0xFF64B5F6);
   static const Color darkCardBackground = Color(0xFF2D2D2D);
   static const Color darkText = Color(0xFFFFFFFF);
@@ -74,18 +74,18 @@ class AppColors {
   static const Color dormitoryStartColor = Color(0xFF26A69A);
   static const Color dormitoryEndColor = Color(0xFF00796B);
   static const Color blockBackground = white;
-  static const Color blockBorder = indigo;
+  // static const Color blockBorder = indigo;
   static const Color floorCardBackground = white;
-  static const Color floorCardBorder = blue;
+  // static const Color floorCardBorder = blue;
   static const Color floorText = black87;
 
   // Dormitory Colors - Dark Mode
   static const Color darkDormitoryStartColor = Color(0xFF00695C);
   static const Color darkDormitoryEndColor = Color(0xFF004D40);
   static const Color darkBlockBackground = Color(0xFF2D2D2D);
-  static const Color darkBlockBorder = darkAccent;
+  // static const Color darkBlockBorder = darkAccent;
   static const Color darkFloorCardBackground = Color(0xFF1E1E1E);
-  static const Color darkFloorCardBorder = darkAccent;
+  // static const Color darkFloorCardBorder = darkAccent;
   static const Color darkFloorText = darkText;
 
   // Login Colors
@@ -93,6 +93,13 @@ class AppColors {
   static const Color loginGradientEnd = indigoAccent;
   static const Color loginButtonBackground = indigo;
   static const Color loginButtonText = white;
+
+  // Dark Mode Login Colors
+  static const Color darkLoginGradientStart = Color(0xFF1A237E);
+  static const Color darkLoginGradientEnd = Color(0xFF303F9F);
+  static const Color darkLoginButtonBackground = Color(0xFF303F9F);
+  static const Color darkLoginButtonText = white;
+  static const Color darkLoginCardBackground = Color(0xFF1E1E1E);
 
   // Dark Mode Dialog Colors
   static const Color darkDialogBackground = darkSurface;
@@ -144,4 +151,15 @@ class AppColors {
 
   static const Color darkNextTermStartColor = Color(0xFF004D40);
   static const Color darkNextTermEndColor = Color(0xFF26A69A);
+
+  // Dormitory Specific Colors - Light Mode
+  static const Color primary = Color(0xFF1976D2);
+  static const Color appBarBackground = primary;
+  static const Color floorCardBorder = primary;
+  static const Color blockBorder = primary;
+
+  // Dormitory Specific Colors - Dark Mode
+  static const Color darkPrimary = Color(0xFF2196F3);
+  static const Color darkFloorCardBorder = Color(0xFF3D3D3D);
+  static const Color darkBlockBorder = Color(0xFF3D3D3D);
 }

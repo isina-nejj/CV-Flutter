@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../../core/style/colors.dart';
 import '../../../../core/theme/dark_mode_controller.dart';
-import '../../../../data/services/hive_service.dart';
+import '../../../../../shared/widgets/dark_mode_toggle.dart';
+import '../../../../../data/services/hive_service.dart';
 
 class CourseTimetablePage extends StatefulWidget {
   final List<int> selectedCourseIds;
@@ -216,7 +217,7 @@ class _CourseTimetablePageState extends State<CourseTimetablePage> {
 
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final darkMode = DarkModeController.shared;
 
     return Scaffold(
       appBar: AppBar(
@@ -236,7 +237,9 @@ class _CourseTimetablePageState extends State<CourseTimetablePage> {
         ],
       ),
       body: Container(
-        color: isDarkMode ? AppColors.darkBackground : AppColors.blueShade50,
+        color: darkMode.isDarkMode
+            ? AppColors.darkBackground
+            : AppColors.blueShade50,
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: SingleChildScrollView(

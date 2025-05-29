@@ -11,21 +11,42 @@ class AppTextStyles {
     );
   }
 
-  static const TextStyle mainPageMenuButton = TextStyle(
-    fontSize: 18,
-    fontWeight: FontWeight.w500,
-    color: AppColors.white,
-  );
+  static TextStyle body(bool isDarkMode) {
+    return TextStyle(
+      fontSize: 14,
+      color: isDarkMode ? AppColors.darkText : AppColors.black87,
+    );
+  }
 
-  static const TextStyle schedulePageTitle = TextStyle(
-    fontSize: 16,
-    fontWeight: FontWeight.bold,
-  );
+  static TextStyle caption(bool isDarkMode) {
+    return TextStyle(
+      fontSize: 12,
+      color: isDarkMode ? AppColors.darkTextSecondary : AppColors.black54,
+    );
+  }
 
-  static const TextStyle errorText = TextStyle(
-    color: Colors.red,
-    fontSize: 14,
-  );
+  static TextStyle mainPageMenuButton(bool isDarkMode) {
+    return TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.w500,
+      color: isDarkMode ? AppColors.darkText : AppColors.white,
+    );
+  }
+
+  static TextStyle schedulePageTitle(bool isDarkMode) {
+    return TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.bold,
+      color: isDarkMode ? AppColors.darkText : AppColors.black,
+    );
+  }
+
+  static TextStyle errorText(bool isDarkMode) {
+    return TextStyle(
+      color: isDarkMode ? AppColors.darkError : AppColors.errorText,
+      fontSize: 14,
+    );
+  }
 
   // Course selection styles
   static const TextStyle courseRegistrationTitle = TextStyle(
@@ -60,6 +81,14 @@ class AppTextStyles {
     );
   }
 
+  static TextStyle blockName(bool isDarkMode) {
+    return TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w500,
+      color: isDarkMode ? AppColors.darkText : AppColors.black87,
+    );
+  }
+
   static TextStyle floorTitle(bool isDarkMode) {
     return TextStyle(
       fontSize: 16,
@@ -69,26 +98,62 @@ class AppTextStyles {
   }
 
   // Login styles
-  static const TextStyle loginTitle = TextStyle(
-    fontSize: 32,
-    fontWeight: FontWeight.bold,
-  );
+  static TextStyle getLoginTitle(bool isDarkMode) {
+    return TextStyle(
+      fontSize: 32,
+      fontWeight: FontWeight.bold,
+      color: isDarkMode ? AppColors.darkText : AppColors.black87,
+    );
+  }
 
-  static const TextStyle loginButtonText = TextStyle(
-    fontSize: 18,
-    fontWeight: FontWeight.bold,
-    color: AppColors.loginButtonText,
-  );
+  static TextStyle getLoginButtonText(bool isDarkMode) {
+    return TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.bold,
+      color: isDarkMode
+          ? AppColors.darkLoginButtonText
+          : AppColors.loginButtonText,
+    );
+  }
 
-  // Eligible Course styles
-  static const TextStyle eligibleCourseTitle = TextStyle(
-    fontSize: 18,
-    fontWeight: FontWeight.w600,
-    color: AppColors.black87,
-  );
+  // Section styles
+  static TextStyle eligibleCourseTitle(bool isDarkMode) {
+    return TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.w600,
+      color: isDarkMode ? AppColors.darkText : AppColors.black87,
+    );
+  }
 
-  static const TextStyle eligibleCourseSubtitle = TextStyle(
-    fontSize: 14,
-    color: AppColors.black54,
-  );
+  static TextStyle eligibleCourseSubtitle(bool isDarkMode) {
+    return TextStyle(
+      fontSize: 14,
+      color: isDarkMode ? AppColors.darkTextSecondary : AppColors.black54,
+    );
+  }
+
+  // Card text styles
+  static TextStyle cardTitle(bool isDarkMode) {
+    return TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w600,
+      color: isDarkMode ? AppColors.darkText : AppColors.black87,
+    );
+  }
+
+  static TextStyle cardSubtitle(bool isDarkMode) {
+    return TextStyle(
+      fontSize: 14,
+      color: isDarkMode ? AppColors.darkTextSecondary : AppColors.black54,
+    );
+  }
+
+  static TextStyle cardCaption(bool isDarkMode) {
+    return TextStyle(
+      fontSize: 12,
+      color: isDarkMode
+          ? AppColors.darkTextSecondary.withOpacity(0.8)
+          : AppColors.black54.withOpacity(0.8),
+    );
+  }
 }

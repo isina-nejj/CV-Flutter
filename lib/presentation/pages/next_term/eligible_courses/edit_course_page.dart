@@ -5,6 +5,8 @@ import '../../../../../data/services/hive_service.dart';
 import '../../../../../core/theme/dark_mode_controller.dart';
 import '../../../../../core/style/colors.dart';
 
+import '../../../../../shared/widgets/dark_mode_toggle.dart';
+
 class EditCoursePage extends StatefulWidget {
   final String? sectionId;
   final int courseId;

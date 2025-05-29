@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../../data/services/hive_service.dart';
+import '../../../../../data/services/hive_service.dart';
 import 'show/eligible_courses_page.dart';
 import '../../../core/style/colors.dart';
-import '../../../core/theme/dark_mode_controller.dart';
+import '../../../../../core/theme/dark_mode_controller.dart';
+import '../../../../../shared/widgets/dark_mode_toggle.dart';
 
 class CourseSelectionPageMobile extends StatefulWidget {
   final HiveService hiveService;

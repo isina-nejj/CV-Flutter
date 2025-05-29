@@ -7,12 +7,16 @@ class DarkModeController extends ChangeNotifier {
   bool _isDarkMode = false;
   bool get isDarkMode => _isDarkMode;
 
-  // Singleton instance
-  static final DarkModeController _instance = DarkModeController._internal();
-  factory DarkModeController() => _instance;
+  // Singleton pattern
+  static final DarkModeController instance = DarkModeController._internal();
+
+  factory DarkModeController() => instance;
+
   DarkModeController._internal();
 
-  // Initialize dark mode state from preferences
+  static DarkModeController get shared => instance;
+
+  // Initialize from SharedPreferences
   Future<void> init() async {
     final prefs = await SharedPreferences.getInstance();
     _isDarkMode = prefs.getBool(_darkModeKey) ?? false;
@@ -25,63 +29,6 @@ class DarkModeController extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_darkModeKey, _isDarkMode);
     notifyListeners();
-  }
-
-  // Get theme data based on dark mode state
-  ThemeData get themeData {
-    if (_isDarkMode) {
-      return ThemeData(
-        brightness: Brightness.dark,
-        primaryColor: AppColors.darkPrimary,
-        scaffoldBackgroundColor: AppColors.darkBackground,
-        cardColor: AppColors.darkCardBackground,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: AppColors.darkAppBarBackground,
-          foregroundColor: AppColors.darkText,
-          iconTheme: IconThemeData(color: AppColors.darkIcon),
-        ),
-        textTheme: const TextTheme(
-          bodyLarge: TextStyle(color: AppColors.darkText),
-          bodyMedium: TextStyle(color: AppColors.darkText),
-          titleLarge: TextStyle(color: AppColors.darkText),
-          titleMedium: TextStyle(color: AppColors.darkTextSecondary),
-        ),
-        iconTheme: const IconThemeData(color: AppColors.darkIcon),
-        dividerColor: AppColors.darkDivider,
-        colorScheme: ColorScheme.dark(
-          primary: AppColors.darkPrimary,
-          secondary: AppColors.darkAccent,
-          surface: AppColors.darkSurface,
-          error: AppColors.darkError,
-        ),
-      );
-    } else {
-      return ThemeData(
-        brightness: Brightness.light,
-        primaryColor: AppColors.indigo,
-        scaffoldBackgroundColor: AppColors.white,
-        cardColor: AppColors.cardBackground,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: AppColors.appBarBackground,
-          foregroundColor: AppColors.appBarText,
-          iconTheme: IconThemeData(color: AppColors.appBarText),
-        ),
-        textTheme: const TextTheme(
-          bodyLarge: TextStyle(color: AppColors.black87),
-          bodyMedium: TextStyle(color: AppColors.black87),
-          titleLarge: TextStyle(color: AppColors.black),
-          titleMedium: TextStyle(color: AppColors.black54),
-        ),
-        iconTheme: const IconThemeData(color: AppColors.navigationIconColor),
-        dividerColor: AppColors.greyWithOpacity30,
-        colorScheme: const ColorScheme.light(
-          primary: AppColors.indigo,
-          secondary: AppColors.blue,
-          surface: AppColors.white,
-          error: AppColors.errorText,
-        ),
-      );
-    }
   }
 
   // Get menu button colors based on dark mode state
@@ -160,40 +107,67 @@ class DarkModeController extends ChangeNotifier {
       }
     }
   }
-}
 
-class DarkModeToggle extends StatelessWidget {
-  final DarkModeController controller;
-  const DarkModeToggle({super.key, required this.controller});
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: controller,
-      builder: (context, child) {
-        return IconButton(
-          icon: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 300),
-            transitionBuilder: (Widget child, Animation<double> animation) {
-              return RotationTransition(
-                turns: animation,
-                child: FadeTransition(
-                  opacity: animation,
-                  child: child,
-                ),
-              );
-            },
-            child: Icon(
-              controller.isDarkMode ? Icons.light_mode : Icons.dark_mode,
-              key: ValueKey<bool>(controller.isDarkMode),
-              color: controller.isDarkMode
-                  ? AppColors.darkIcon
-                  : AppColors.appBarText,
-            ),
-          ),
-          onPressed: () => controller.toggleDarkMode(),
-        );
-      },
-    );
+  // Get theme data based on dark mode state
+  ThemeData get themeData {
+    if (_isDarkMode) {
+      return ThemeData(
+        useMaterial3: true,
+        brightness: Brightness.dark,
+        primaryColor: AppColors.darkPrimary,
+        scaffoldBackgroundColor: AppColors.darkBackground,
+        cardColor: AppColors.darkCardBackground,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: AppColors.darkAppBarBackground,
+          foregroundColor: AppColors.darkText,
+          iconTheme: IconThemeData(color: AppColors.darkIcon),
+          elevation: 0,
+        ),
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(color: AppColors.darkText),
+          bodyMedium: TextStyle(color: AppColors.darkText),
+          titleLarge: TextStyle(color: AppColors.darkText),
+          titleMedium: TextStyle(color: AppColors.darkTextSecondary),
+        ),
+        iconTheme: const IconThemeData(color: AppColors.darkIcon),
+        dividerColor: AppColors.darkDivider,
+        colorScheme: ColorScheme.dark(
+          primary: AppColors.darkPrimary,
+          secondary: AppColors.darkAccent,
+          surface: AppColors.darkSurface,
+          error: AppColors.darkError,
+          background: AppColors.darkBackground,
+        ),
+      );
+    } else {
+      return ThemeData(
+        useMaterial3: true,
+        brightness: Brightness.light,
+        primaryColor: AppColors.primary,
+        scaffoldBackgroundColor: AppColors.white,
+        cardColor: AppColors.white,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: AppColors.appBarBackground,
+          foregroundColor: AppColors.white,
+          iconTheme: IconThemeData(color: AppColors.white),
+          elevation: 0,
+        ),
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(color: AppColors.black87),
+          bodyMedium: TextStyle(color: AppColors.black87),
+          titleLarge: TextStyle(color: AppColors.black),
+          titleMedium: TextStyle(color: AppColors.black54),
+        ),
+        iconTheme: const IconThemeData(color: AppColors.black87),
+        dividerColor: AppColors.greyWithOpacity30,
+        colorScheme: ColorScheme.light(
+          primary: AppColors.primary,
+          secondary: AppColors.blue,
+          surface: AppColors.white,
+          error: AppColors.errorText,
+          background: AppColors.white,
+        ),
+      );
+    }
   }
 }

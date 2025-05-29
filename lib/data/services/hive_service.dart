@@ -1,6 +1,4 @@
-import 'dart:convert';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+// import 'dart:convert';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../models/section_model.dart';
 import '../services/api_service.dart';
@@ -68,12 +66,12 @@ class HiveService {
   // ذخیره داده‌های دریافتی از سرور
   Future<void> saveServerData(Map<String, dynamic> data) async {
     try {
-      debugPrint('Starting to save server data');
+      print('Starting to save server data');
 
       // Save course_map
       if (data.containsKey('course_map')) {
         await coursesBox.put('course_map', data['course_map']);
-        debugPrint('Course map saved');
+        print('Course map saved');
       }
 
       // Save sections if present
@@ -85,14 +83,14 @@ class HiveService {
           final sectionModel = SectionModel.fromJson(sectionData);
           await sectionsBox.add(sectionModel);
         }
-        debugPrint('Sections saved');
+        print('Sections saved');
       }
 
       await updateLastUpdateTime();
-      debugPrint('Server data saved successfully');
+      print('Server data saved successfully');
     } catch (e, stackTrace) {
-      debugPrint('Error in saveServerData: $e');
-      debugPrint('Stack trace: $stackTrace');
+      print('Error in saveServerData: $e');
+      print('Stack trace: $stackTrace');
       throw e;
     }
   }

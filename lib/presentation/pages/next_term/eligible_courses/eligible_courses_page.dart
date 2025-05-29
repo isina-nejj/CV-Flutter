@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import '../../../../data/services/hive_service.dart';
+import '../../../../../data/services/hive_service.dart';
 import 'section_popup.dart';
 import '../../../../../core/style/colors.dart';
 import '../../../../../core/style/text_styles.dart';
 import '../../../../../core/style/sizes.dart';
-import '../../../../core/theme/dark_mode_controller.dart';
+import '../../../../../core/theme/dark_mode_controller.dart';
+
+import '../../../../../shared/widgets/dark_mode_toggle.dart';
 
 class EligibleCoursesPage extends StatefulWidget {
   final List<int> selectedCourseIds;

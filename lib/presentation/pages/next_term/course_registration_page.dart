@@ -4,6 +4,7 @@ import 'eligible_courses/eligible_courses_page.dart';
 import '../../../../core/style/text_styles.dart';
 import '../../../../core/style/colors.dart';
 import '../../../../core/theme/dark_mode_controller.dart';
+import '../../../../shared/widgets/dark_mode_toggle.dart';
 
 class CourseRegistrationPage extends StatefulWidget {
   final HiveService hiveService;
@@ -51,6 +52,13 @@ class _CourseRegistrationPage extends State<CourseRegistrationPage> {
         print('هیچ درسی در کش یافت نشد');
         return;
       }
+
+      // ابتدا سکشن‌ها را بارگذاری می‌کنیم
+      final sections = data['sections'] as List?;
+      if (sections != null) {
+        _loadSections(sections.cast<Map<String, dynamic>>());
+      }
+
       _cachedCourses = courseMap.values
           .map((courseData) {
             try {
@@ -94,9 +102,12 @@ class _CourseRegistrationPage extends State<CourseRegistrationPage> {
   }
 
   void _loadSections(List<Map<String, dynamic>> sections) {
+    _courseSections.clear();
     for (var section in sections) {
-      final courseId = section['course_id'] as int;
-      _courseSections[courseId] = true;
+      final courseId = section['course_id'] as int?;
+      if (courseId != null) {
+        _courseSections[courseId] = true;
+      }
     }
   }
 
@@ -177,11 +188,7 @@ class _CourseRegistrationPage extends State<CourseRegistrationPage> {
       Colors.pink.shade100,
     ];
 
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-
-    print('isDarkMode: $isDarkMode'); // Debugging to check dark mode status
-
-    final selectedTermColors = isDarkMode
+    final selectedTermColors = darkMode.isDarkMode
         ? [
             AppColors.darkPinkSelected,
             AppColors.darkBlueSelected,
